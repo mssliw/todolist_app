@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To do list app</title>
+</head>
+<body>
+    <h1> To do list </h1>
+    <div>Add a new todo item:
+        <form action="{{ url_for('add') }}" method="POST">
+        <input type="text" name="item-to-do">
+        <input type="submit" value="Add!">
+        </form>
+    </div>
+    <div>
+        <form action="{{ url_for('index') }}" method="POST">
+        <h2>Items to do</h2>
+        <u1>
+            {% for todo in todos %}
+            <li style="font-size: 30pt">{{ todo.text }} <a href="#">Done!</a></li>
+            {% endfor %}
+        </u1>
+            <input type="submit" value="Update items">
+        </form>
+    </div>
+</body>
+</html>
