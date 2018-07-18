@@ -1,2 +1,2 @@
 # todolist_app
-A simple app which enables creating and managing lists of task to do
+A simple app which enables to create and manage lists of task to do
