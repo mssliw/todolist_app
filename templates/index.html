@@ -10,37 +10,34 @@
         <form action="{{ url_for('create_new_list') }}" method='POST'>
         <p> Create new task list:
         <input type="text" name="create-new-list"> </p>
-        <input type="submit" value="Create!">
+                        <input type="submit" value="Add!">
+
     </form>
     </div>
     <div>
-        <form action="{{ url_for('add') }}" method="POST">
-        <p>Add a new todo item:
-        <input type="text" name="task-to-do"></p>
-            <p>add some details:
-                <input type="text" name="details-to-do"></p>
-        <input type="submit" value="Add!">
-        </form>
-    </div>
-    <div>
-        <h2>Items to do</h2>
-        <u1>
+        {% for task_list in task_lists %}
+            <div><li style="font-size: 40pt">{{ task_list.list_title }}</li>
+
                 {% for task_card in incomplete %}
+                {% if task_card in task_list.task_cards %}
                 <li style="font-size: 30pt">{{ task_card.card_title }} <a href="{{ url_for('complete', id=task_card.id) }}">Done!</a>
                     {% for task_details in task_card.task_details %}
                         <li style="font-size: 15p"> {{ task_details.task_description }}</li>
                     {% endfor %}
-                {% endfor %}
-        </u1>
-    </div>
+                {% endif %}
 
-    <!--<div>-->
-        <!--{% for task_list in task_lists %}-->
-        <!--<div><li style="font-size: 40pt">{{ task_list.list_title }} </li>-->
-            <!--<li style="font-size: 40pt">{{ task_list.task_cards }}</li>-->
-        <!--</div>-->
-        <!--{% endfor %}-->
-    <!--</div>-->
+                {% endfor %}
+
+
+            <form action="{{ url_for('add', list_title=task_list.list_title) }}" method="POST">
+            <p>Add a new todo item:
+            <input type="text" name="task-to-do"></p>
+                <p>add some details:
+                    <input type="text" name="details-to-do"></p>
+            <input type="submit" value="Add!">
+        </form></div>
+        {% endfor %}
+    </div>
 
     <div>
         <h2>Items already done</h2>

@@ -23,7 +23,8 @@ class TaskCard(db.Model):
     accomplished = db.Column(db.Boolean)
 
     task_list_id = db.Column(db.Integer,
-                             db.ForeignKey('task-list.id'))
+                             db.ForeignKey('task-list.id'),
+                             nullable=False)
     task_list = db.relationship('TaskList',
                                 back_populates='task_cards')
     task_details = db.relationship('TaskDetails')
@@ -35,7 +36,8 @@ class TaskDetails(db.Model):
     task_description = db.Column(db.String(512))
 
     task_card_id = db.Column(db.Integer,
-                             db.ForeignKey('task-card.id'))
+                             db.ForeignKey('task-card.id'),
+                             nullable=False)
     task_card = db.relationship('TaskCard',
                                 back_populates='task_details')
 
@@ -50,7 +52,7 @@ def index():
     return render_template('index.html', incomplete=incomplete, accomplished=accomplished, task_descriptions=task_descriptions, task_lists=task_lists)
 
 
-@app.route('/new_list', methods=['POST'])
+@app.route('/create_new_list', methods=['POST'])
 def create_new_list():
     new_list = TaskList(list_title=request.form['create-new-list'])
     db.session.add(new_list)
@@ -58,9 +60,11 @@ def create_new_list():
     return redirect(url_for('index'))
 
 
-@app.route('/add', methods=['POST'])
-def add():
-    new_task = TaskCard(card_title=request.form['task-to-do'], accomplished=False)
+@app.route('/add/<list_title>', methods=['POST'])
+def add(list_title):
+    task_list = TaskList.query.filter_by(list_title=list_title).first()
+    # task_list = db.session.query(TaskList).first()
+    new_task = TaskCard(card_title=request.form['task-to-do'], accomplished=False, task_list=task_list)
     db.session.add(new_task)
     db.session.commit()
 
@@ -85,11 +89,11 @@ def complete(id):
     return redirect(url_for('index'))
 
 
-@app.route('/details/<id>')
-def details(id):
-    details_id = TaskDetails.query.filter_by(task_card_id=int(id))
-
-    return redirect(url_for('index'))
+# @app.route('/details/<id>')
+# def details(id):
+#     details_id = TaskDetails.query.filter_by(task_card_id=int(id))
+#
+#     return redirect(url_for('index'))
 
 
 if __name__ == "__main__":
