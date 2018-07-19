@@ -6,9 +6,12 @@
 </head>
 <body>
     <h1> To do list </h1>
-    <div>Add a new todo item:
+    <div>
         <form action="{{ url_for('add') }}" method="POST">
-        <input type="text" name="item-to-do">
+        <p>Add a new todo item:
+        <input type="text" name="item-to-do"></p>
+            <p>add some details:
+                <input type="text" name="details-to-do"></p>
         <input type="submit" value="Add!">
         </form>
     </div>
@@ -17,6 +20,7 @@
         <u1>
             {% for todo in incomplete %}
             <li style="font-size: 30pt">{{ todo.text }} <a href="{{ url_for('complete', id=todo.id) }}">Done!</a></li>
+                <li style="font-size: 15pt">{{ details.text }}</li>
             {% endfor %}
         </u1>
     </div>
