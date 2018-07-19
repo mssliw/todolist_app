@@ -13,6 +13,8 @@ class TaskList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     list_title = db.Column(db.String(256))
 
+    task_cards = db.relationship('TaskCard')
+
 
 class TaskCard(db.Model):
     __tablename__ = "task-card"
@@ -23,7 +25,8 @@ class TaskCard(db.Model):
     task_list_id = db.Column(db.Integer,
                              db.ForeignKey('task-list.id'))
     task_list = db.relationship('TaskList',
-                                foreign_keys=task_list_id)
+                                back_populates='task_cards')
+    task_details = db.relationship('TaskDetails')
 
 
 class TaskDetails(db.Model):
@@ -34,18 +37,17 @@ class TaskDetails(db.Model):
     task_card_id = db.Column(db.Integer,
                              db.ForeignKey('task-card.id'))
     task_card = db.relationship('TaskCard',
-                                foreign_keys=task_card_id)
+                                back_populates='task_details')
 
 
 @app.route('/')
 def index():
-    task_lists = TaskList.query.all()
+    task_lists = db.session.query(TaskList).all()
     incomplete = TaskCard.query.filter_by(accomplished=False).all()
     accomplished = TaskCard.query.filter_by(accomplished=True).all()
-    task_details = [TaskDetails.query.filter_by(task_card_id=i.id).first().task_description for i in incomplete if not None]
-    print(task_details)
-    #FIXME: push parameters of one detail properly
-    return render_template('index.html', incomplete=incomplete, accomplished=accomplished, task_details=task_details, task_lists=task_lists)
+    task_descriptions = db.session.query(TaskDetails).all()
+    print(task_descriptions, task_lists)
+    return render_template('index.html', incomplete=incomplete, accomplished=accomplished, task_descriptions=task_descriptions, task_lists=task_lists)
 
 
 @app.route('/new_list', methods=['POST'])

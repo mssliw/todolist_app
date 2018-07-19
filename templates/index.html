@@ -25,14 +25,23 @@
     <div>
         <h2>Items to do</h2>
         <u1>
-                {% for todo in incomplete %}
-                <li style="font-size: 30pt">{{ todo.card_title }} <a href="{{ url_for('complete', id=todo.id) }}">Done!</a></li>
-                    {% for item in task_details %}
-                            <li style="font-size: 15pt">{{ task_details }}</li>
+                {% for task_card in incomplete %}
+                <li style="font-size: 30pt">{{ task_card.card_title }} <a href="{{ url_for('complete', id=task_card.id) }}">Done!</a>
+                    {% for task_details in task_card.task_details %}
+                        <li style="font-size: 15p"> {{ task_details.task_description }}</li>
                     {% endfor %}
                 {% endfor %}
         </u1>
     </div>
+
+    <!--<div>-->
+        <!--{% for task_list in task_lists %}-->
+        <!--<div><li style="font-size: 40pt">{{ task_list.list_title }} </li>-->
+            <!--<li style="font-size: 40pt">{{ task_list.task_cards }}</li>-->
+        <!--</div>-->
+        <!--{% endfor %}-->
+    <!--</div>-->
+
     <div>
         <h2>Items already done</h2>
         <u1>
