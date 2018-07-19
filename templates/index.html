@@ -13,15 +13,20 @@
         </form>
     </div>
     <div>
-        <form action="{{ url_for('index') }}" method="POST">
         <h2>Items to do</h2>
         <u1>
-            {% for todo in todos %}
-            <li style="font-size: 30pt">{{ todo.text }} <a href="#">Done!</a></li>
+            {% for todo in incomplete %}
+            <li style="font-size: 30pt">{{ todo.text }} <a href="{{ url_for('complete', id=todo.id) }}">Done!</a></li>
             {% endfor %}
         </u1>
-            <input type="submit" value="Update items">
-        </form>
+    </div>
+    <div>
+        <h2>Items already done</h2>
+        <u1>
+            {% for element in complete %}
+            <li style="font-size: 25pt">{{ element.text }}</li>
+            {% endfor %}
+        </u1>
     </div>
 </body>
 </html>
