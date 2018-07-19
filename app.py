@@ -8,45 +8,52 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://///home/magda/PycharmProjects/
 db = SQLAlchemy(app)
 
 
-class Todo(db.Model):
-    __tablename__ = "todo"
+class TaskList(db.Model):
+    __tablename__ = "task-list"
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(256))
-    completed = db.Column(db.Boolean)
-    # details_id = db.Column(db.Integer, db.ForeignKey("details.id"))
+    list_title = db.Column(db.String(256))
 
 
-class Details(db.Model):
+class TaskCard(db.Model):
+    __tablename__ = "task-card"
+    id = db.Column(db.Integer, primary_key=True)
+    card_title = db.Column(db.String(256))
+    accomplished = db.Column(db.Boolean)
+
+    task_list_id = db.Column(db.Integer,
+                             db.ForeignKey('task-list.id'))
+    task_list = db.relationship('TaskList',
+                                foreign_keys=task_list_id)
+
+
+class TaskDetails(db.Model):
     __tablename__ = "details"
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(256))
+    task_description = db.Column(db.String(512))
 
-    todo_id = db.Column(db.Integer,
-                        db.ForeignKey('todo.id'),
-                        nullable=False)
-    todo = db.relationship('Todo',
-                           foreign_keys=todo_id)
+    task_card_id = db.Column(db.Integer,
+                             db.ForeignKey('task-card.id'))
+    task_card = db.relationship('TaskCard',
+                                foreign_keys=task_card_id)
 
 
 @app.route('/')
 def index():
-    incomplete = Todo.query.filter_by(completed=False).all()
-    complete = Todo.query.filter_by(completed=True).all()
-    details = None
-    for i in incomplete:
-        details = Details.query.filter_by(todo_id=i.id).first()
-    #     print(i.id, details.text, "for loop")
-    # print(incomplete, details.text, 'after for loop')
-    return render_template('index.html', incomplete=incomplete, complete=complete, details=details)
+    incomplete = TaskCard.query.filter_by(accomplished=False).all()
+    accomplished = TaskCard.query.filter_by(accomplished=True).all()
+    task_details = [TaskDetails.query.filter_by(task_card_id=i.id).first().task_description for i in incomplete if not None]
+    print(task_details)
+    #FIXME: push parameters of one detail properly
+    return render_template('index.html', incomplete=incomplete, accomplished=accomplished, task_details=task_details)
 
 
 @app.route('/add', methods=['POST'])
 def add():
-    todo = Todo(text=request.form['item-to-do'], completed=False)
-    db.session.add(todo)
+    new_task = TaskCard(card_title=request.form['item-to-do'], accomplished=False)
+    db.session.add(new_task)
     db.session.commit()
 
-    detail = Details(text=request.form['details-to-do'], todo_id=todo.id)
+    detail = TaskDetails(task_description=request.form['details-to-do'], task_card_id=new_task.id)
     db.session.add(detail)
     db.session.commit()
 
@@ -58,18 +65,19 @@ def update():
     return redirect(url_for('index'))
 
 
-@app.route('/complete/<id>')
+@app.route('/accomplished/<id>')
 def complete(id):
-
-    todo = Todo.query.filter_by(id=int(id)).first()
-    todo.completed = True
+    task = TaskCard.query.filter_by(id=int(id)).first()
+    task.accomplished = True
     db.session.commit()
 
     return redirect(url_for('index'))
 
+
 @app.route('/details/<id>')
 def details(id):
-    details = Details.query.filter_by(id=int(id).first())
+    details_id = TaskDetails.query.filter_by(task_card_id=int(id))
+
     return redirect(url_for('index'))
 
 
