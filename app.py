@@ -39,17 +39,26 @@ class TaskDetails(db.Model):
 
 @app.route('/')
 def index():
+    task_lists = TaskList.query.all()
     incomplete = TaskCard.query.filter_by(accomplished=False).all()
     accomplished = TaskCard.query.filter_by(accomplished=True).all()
     task_details = [TaskDetails.query.filter_by(task_card_id=i.id).first().task_description for i in incomplete if not None]
     print(task_details)
     #FIXME: push parameters of one detail properly
-    return render_template('index.html', incomplete=incomplete, accomplished=accomplished, task_details=task_details)
+    return render_template('index.html', incomplete=incomplete, accomplished=accomplished, task_details=task_details, task_lists=task_lists)
+
+
+@app.route('/new_list', methods=['POST'])
+def create_new_list():
+    new_list = TaskList(list_title=request.form['create-new-list'])
+    db.session.add(new_list)
+    db.session.commit()
+    return redirect(url_for('index'))
 
 
 @app.route('/add', methods=['POST'])
 def add():
-    new_task = TaskCard(card_title=request.form['item-to-do'], accomplished=False)
+    new_task = TaskCard(card_title=request.form['task-to-do'], accomplished=False)
     db.session.add(new_task)
     db.session.commit()
 

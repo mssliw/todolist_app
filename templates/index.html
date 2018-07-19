@@ -5,11 +5,18 @@
     <title>To do list app</title>
 </head>
 <body>
-    <h1> To do list </h1>
+    <h1> To do app </h1>
+    <div>
+        <form action="{{ url_for('create_new_list') }}" method='POST'>
+        <p> Create new task list:
+        <input type="text" name="create-new-list"> </p>
+        <input type="submit" value="Create!">
+    </form>
+    </div>
     <div>
         <form action="{{ url_for('add') }}" method="POST">
         <p>Add a new todo item:
-        <input type="text" name="item-to-do"></p>
+        <input type="text" name="task-to-do"></p>
             <p>add some details:
                 <input type="text" name="details-to-do"></p>
         <input type="submit" value="Add!">
@@ -18,14 +25,12 @@
     <div>
         <h2>Items to do</h2>
         <u1>
-            {% for todo in incomplete %}
-            <li style="font-size: 30pt">{{ todo.card_title }} <a href="{{ url_for('complete', id=todo.id) }}">Done!</a></li>
-                {% for item in task_details %}
-                        <li style="font-size: 15pt">{{ task_details }}</li>
+                {% for todo in incomplete %}
+                <li style="font-size: 30pt">{{ todo.card_title }} <a href="{{ url_for('complete', id=todo.id) }}">Done!</a></li>
+                    {% for item in task_details %}
+                            <li style="font-size: 15pt">{{ task_details }}</li>
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
-
-
         </u1>
     </div>
     <div>
