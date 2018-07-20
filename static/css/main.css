@@ -1,0 +1,72 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+  color: #444;
+  background-color: #e3e0cf;
+}
+/*
+ * Formatting the header area
+ */
+
+
+header {
+  background-color: #c5d5cb;
+  height: 35px;
+  width: 100%;
+  opacity: .9;
+  margin-bottom: 10px;
+}
+
+.container {
+  width: 30%;
+  border-radius: 5px;
+}
+
+h1.title {
+  color:  #9fa8a3;
+  background-color: #e3e0cf;
+  font-family: "Roboto", sans-serif;
+  font-size: 3em;
+  margin-top: 40px;
+  letter-spacing: +1px;
+
+}
+
+div.new-item {
+  font-family: "Open Sans", sans-serif;
+  color: #e3e0cf;
+  background-color: #9fa8a3;
+}
+
+div.existing-item {
+  font-family: "Open Sans", sans-serif;
+  color:  #9fa8a3;
+  background-color: #c5d5cb;
+  padding: 10px 0 30px 0;
+
+}
+
+div.button {
+   font-family: "Roboto", sans-serif;
+   align: center;
+
+   text-transform: capitalize;
+   font-size: 3em;
+   }
+
+h2 {
+  font-size: 3em;
+  margin-top: 40px;
+  text-align: center;
+  letter-spacing: -2px;
+}
+
+li.big-text {
+  font-family: "Roboto", sans-serif;
+  font-size: 6em;
+}
+li.text {
+  font-family: "Open Sans", sans-serif;
+  font-size: 20pt;
+}
