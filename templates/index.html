@@ -6,7 +6,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet"></head>
 <body>
-    <h1 class="title"> plan your tasks </h1>
+    <div class="title-background">
+        <h1 class="title"> plan your tasks </h1></div>
     <div class="container new-item">
         <form action="{{ url_for('create_new_list') }}" method='POST'>
         <h3>create new task list:</h3>
@@ -37,6 +38,7 @@
             <input type="submit" value="Add!">
         </form>
         </div>
+
         {% endfor %}
     </div>
 

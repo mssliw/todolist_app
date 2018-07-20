@@ -11,7 +11,9 @@ db = SQLAlchemy(app)
 class TaskList(db.Model):
     __tablename__ = "task-list"
     id = db.Column(db.Integer, primary_key=True)
-    list_title = db.Column(db.String(256))
+    list_title = db.Column(db.String(256),
+                           nullable=False)
+    list_accomplished = db.Column(db.Boolean)
 
     task_cards = db.relationship('TaskCard')
 
@@ -47,9 +49,10 @@ def index():
     task_lists = db.session.query(TaskList).all()
     incomplete = TaskCard.query.filter_by(accomplished=False).all()
     accomplished = TaskCard.query.filter_by(accomplished=True).all()
+    list_accomplished = TaskCard.query.filter_by(accomplished=False).all()
     task_descriptions = db.session.query(TaskDetails).all()
     print(task_descriptions, task_lists)
-    return render_template('index.html', incomplete=incomplete, accomplished=accomplished, task_descriptions=task_descriptions, task_lists=task_lists)
+    return render_template('index.html', incomplete=incomplete, accomplished=accomplished, task_descriptions=task_descriptions, task_lists=task_lists, lists_accomplished=list_accomplished)
 
 
 @app.route('/create_new_list', methods=['POST'])
@@ -82,9 +85,14 @@ def update():
 
 @app.route('/accomplished/<id>')
 def complete(id):
+    task_list = TaskCard.query.filter_by(id=int(id)).first().task_list
     task = TaskCard.query.filter_by(id=int(id)).first()
     task.accomplished = True
     db.session.commit()
+    still_to_do = TaskCard.query.filter_by(accomplished=False).first()
+    if not still_to_do:
+        task_list.accomplished = True
+        db.session.commit()
 
     return redirect(url_for('index'))
 
