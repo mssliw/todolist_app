@@ -57,9 +57,13 @@ def index():
 
 @app.route('/create_new_list', methods=['POST'])
 def create_new_list():
-    new_list = TaskList(list_title=request.form['create-new-list'])
-    db.session.add(new_list)
-    db.session.commit()
+    list_title = request.form['create-new-list']
+    if list_title:
+        new_list = TaskList(list_title=request.form['create-new-list'])
+        db.session.add(new_list)
+        db.session.commit()
+    else:
+        print('Name of the list cannot be empty')
     return redirect(url_for('index'))
 
 

@@ -6,28 +6,38 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet"></head>
 <body>
-    <div class="title-background">
-        <h1 class="title"> plan your tasks </h1></div>
-    <div class="container new-item">
-        <form action="{{ url_for('create_new_list') }}" method='POST'>
-        <h3>create new task list:</h3>
-        <input type="text" name="create-new-list">
-            <input type="submit" value="Add!">
 
-        </form>
+
+
+    <div class="title-background">
+        <h1 class="title">plan your tasks</h1>
     </div>
+        <div class="container new-item"><form action="{{ url_for('create_new_list') }}" method='POST'>
+            <h3>create new task list:</h3>
+            <input type="text" name="create-new-list">
+            <input type="submit" value="Add!">
+        </form></div>
 
         {% for task_list in task_lists %}
         <div class="container new-item">
             <h3>{{ task_list.list_title }}</h3>
                 {% for task_card in incomplete %}
+            <div class="card">
                 {% if task_card in task_list.task_cards %}
-            <p style="font-size: 20pt">{{ task_card.card_title }}
-                <a href="{{ url_for('complete', id=task_card.id) }}">done!</a></p>
+                <button class="collapsible"><p style="font-size: 20pt">{{ task_card.card_title }}</p></button>
+
+
+
+                <div class="content">
                     {% for task_details in task_card.task_details %}
                         <p style="text"> {{ task_details.task_description }}</p>
                     {% endfor %}
-                {% endif %}
+                    <a href="{{ url_for('complete', id=task_card.id) }}">mark as done!</a></p>
+
+                </div>
+
+
+                {% endif %}</div>
                 {% endfor %}
 
             <form action="{{ url_for('add', list_title=task_list.list_title) }}" method="POST">
@@ -38,7 +48,6 @@
             <input type="submit" value="Add!">
         </form>
         </div>
-
         {% endfor %}
     </div>
 
@@ -50,5 +59,13 @@
             {% endfor %}
         </u1>
     </div>
+
+
+  <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+
+  <script src="static/js/collapse.js"></script>
+
+
 </body>
 </html>
