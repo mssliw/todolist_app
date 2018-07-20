@@ -6,29 +6,28 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet"></head>
 <body>
-    <h1 class="title"> To do app </h1>
+    <h1 class="title"> plan your tasks </h1>
     <div class="container new-item">
         <form action="{{ url_for('create_new_list') }}" method='POST'>
-        <p> Create new task list:
-        <input type="text" name="create-new-list"> </p>
-                        <input type="submit" value="Add!">
+        <h3>create new task list:</h3>
+        <input type="text" name="create-new-list">
+            <input type="submit" value="Add!">
 
-    </form>
+        </form>
     </div>
-    <div class="container new-item">
-        {% for task_list in task_lists %}
-            <div><li style="font-size: 25pt">{{ task_list.list_title }}</li>
 
+        {% for task_list in task_lists %}
+        <div class="container new-item">
+            <h3>{{ task_list.list_title }}</h3>
                 {% for task_card in incomplete %}
                 {% if task_card in task_list.task_cards %}
-                <li style="font-size: 20pt">{{ task_card.card_title }}
-                    <a href="{{ url_for('complete', id=task_card.id) }}">Done!</a>
+            <p style="font-size: 20pt">{{ task_card.card_title }}
+                <a href="{{ url_for('complete', id=task_card.id) }}">done!</a></p>
                     {% for task_details in task_card.task_details %}
-                        <li style="text"> {{ task_details.task_description }}</li>
+                        <p style="text"> {{ task_details.task_description }}</p>
                     {% endfor %}
                 {% endif %}
                 {% endfor %}
-
 
             <form action="{{ url_for('add', list_title=task_list.list_title) }}" method="POST">
             <p>Add a new todo item:
@@ -36,14 +35,16 @@
                 <p>add some details:
                     <input type="text" name="details-to-do"></p>
             <input type="submit" value="Add!">
-        </form></div>
+        </form>
+        </div>
         {% endfor %}
     </div>
+
     <div class="container existing-item">
-        <h2>Items already done</h2>
+        <h3>already accomplished</h3>
         <u1>
             {% for element in accomplished %}
-            <li style="font-size: 15pt">{{ element.card_title }}</li>
+            <p style="font-size: 15pt">{{ element.card_title }}</p>
             {% endfor %}
         </u1>
     </div>
