@@ -6,17 +6,18 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet"></head>
 <body>
-    <div class="title-background">
+    <div class="header">
         <h1 class="title">plan your tasks</h1>
     </div>
-        <div class="container new-item"><form action="{{ url_for('create_new_list') }}" method='POST'>
+        <div class="new-list new-item "><form action="{{ url_for('create_new_list') }}" method='POST'>
             <h3>create new task list:</h3>
             <input type="text" name="create-new-list" placeholder="list name">
             <input type="submit" value="Add!">
         </form></div>
 
+    <section class="lists">
         {% for task_list in task_lists %}
-        <div class="container new-item">
+        <div class="lists-content container existing-item">
             <h3>{{ task_list.list_title }}</h3>
                 {% for task_card in incomplete %}
             <div class="card">
@@ -37,6 +38,7 @@
         </form>
         </div>
         {% endfor %}
+    </section>
     </div>
 
   <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>

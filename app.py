@@ -101,12 +101,5 @@ def complete(id):
     return redirect(url_for('index'))
 
 
-# @app.route('/details/<id>')
-# def details(id):
-#     details_id = TaskDetails.query.filter_by(task_card_id=int(id))
-#
-#     return redirect(url_for('index'))
-
-
 if __name__ == "__main__":
     app.run(debug=True)
