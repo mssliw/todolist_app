@@ -2,9 +2,9 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Roboto", sans-serif;
-  color:#312c32;
+  color:#96a09a;
   background-color: #677077;
-  background: url("../img/background.jpg");
+  background: url("../img/backgro.png");
 }
 
 .container {
@@ -15,7 +15,7 @@ body {
 }
 
 h1.title {
-  color: #312c32;
+  color: #96a09a;
   font-family: "Roboto", sans-serif;
   font-weight: bold;
   font-size: 4em;
@@ -37,8 +37,8 @@ div.new-task-list {
 
 div.new-item {
   font-family: "Open Sans", sans-serif;
-  color: #312c32;
-  background-color: #daad86;
+  color: #96a09a;
+  background-color: #e6e9e7;
   padding 10px 0 30 px 0;
   display:block;
   float: left;
@@ -50,7 +50,7 @@ div.new-item {
 
 div.existing-item {
   font-family: "Open Sans", sans-serif;
-  color: #312c32;
+  color: #96a09a;
   background-color: #a3d1e6;
   padding: 10px 0 30px 0;
   display: inline-block;
@@ -98,8 +98,8 @@ input {
   width: 99%;
   height: 30px;
   align: center;
-  color: #312c32;
-  background-color: #e6c7ad;
+  color: #96a09a;
+  background-color: #f3f6f9;
   box-shadow: 0 1px 16px 0 rgba(0,0,0,0.2);
   border: 0;
   border-radius: 1.5%;
@@ -121,8 +121,8 @@ input {
 }
 
 .collapsible {
-  color: #312c32;
-  background-color: #e6c7ad;
+  color: #96a09a;
+  background-color: #eff1f0;
   cursor: pointer;
   padding: 18px;
   width: 100%;
@@ -135,22 +135,22 @@ input {
 }
 
 .active, .collapsible:hover {
-  background-color: #eed9c7;
+  background-color: #f8f9f8;
   }
 
 .content {
   padding: 0 18px;
   display: none;
   overflow: hidden;
-  color: #312c32;
-  background-color: #eed9c7;
+  color: #396a09a;
+  background-color: #f8f9f8;
 }
 
 ::placeholder {
   font-family: "Open Sans", sans-serif;
   font-size: 15px;
   font-style: italic;
-  color: #6f6471;
+  color: #bac0bda;
   opacity: 1;
 }
 
@@ -158,6 +158,6 @@ a:link{
   font-family: "Open Sans", sans-serif;
   font-size: 15px;
   font-style: italic;
-  color: #6f6471;
+  color: #96a09a;
   opacity: 1;
 }
