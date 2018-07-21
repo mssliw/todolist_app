@@ -11,8 +11,7 @@ body {
   width: 20%;
   border-radius: 1.5%;
   margin-left: 1%;
-  margin-bottom: 0.3%;
-
+  margin-bottom:0.5%;
 }
 
 h1.title {
@@ -33,10 +32,7 @@ div.new-task-list {
   width: 40%;
   color: #312c32;
   background-color: #daad86;
-  padding: 10px 0 30px 0;
   float: center;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 div.new-item {
@@ -48,6 +44,7 @@ div.new-item {
   float: left;
   display: inline-block;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  padding: 15px 10px 20px 10px;
 
 }
 
@@ -96,17 +93,23 @@ h3 {
 }
 
 input {
+  font-family: "Roboto", sans-serif;
+  font-size: 1.5em;
   width: 99%;
+  height: 30px;
   align: center;
   color: #312c32;
-  background-color: #daad86;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  background-color: #e6c7ad;
+  box-shadow: 0 1px 16px 0 rgba(0,0,0,0.2);
+  border: 0;
+  border-radius: 1.5%;
 }
 
 
 .card {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
+    border-radius: 1.5%;
 }
 
 .card:hover {
@@ -127,6 +130,8 @@ input {
   text-align: left;
   outline: none;
   font-size: 15px;
+  border-radius: 1.5%;
+
 }
 
 .active, .collapsible:hover {
@@ -139,4 +144,20 @@ input {
   overflow: hidden;
   color: #312c32;
   background-color: #eed9c7;
+}
+
+::placeholder {
+  font-family: "Open Sans", sans-serif;
+  font-size: 15px;
+  font-style: italic;
+  color: #6f6471;
+  opacity: 1;
+}
+
+a:link{
+  font-family: "Open Sans", sans-serif;
+  font-size: 15px;
+  font-style: italic;
+  color: #6f6471;
+  opacity: 1;
 }

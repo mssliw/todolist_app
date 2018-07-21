@@ -6,15 +6,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet"></head>
 <body>
-
-
-
     <div class="title-background">
         <h1 class="title">plan your tasks</h1>
     </div>
         <div class="container new-item"><form action="{{ url_for('create_new_list') }}" method='POST'>
             <h3>create new task list:</h3>
-            <input type="text" name="create-new-list">
+            <input type="text" name="create-new-list" placeholder="list name">
             <input type="submit" value="Add!">
         </form></div>
 
@@ -25,47 +22,27 @@
             <div class="card">
                 {% if task_card in task_list.task_cards %}
                 <button class="collapsible"><p style="font-size: 20pt">{{ task_card.card_title }}</p></button>
-
-
-
                 <div class="content">
                     {% for task_details in task_card.task_details %}
                         <p style="text"> {{ task_details.task_description }}</p>
                     {% endfor %}
                     <a href="{{ url_for('complete', id=task_card.id) }}">mark as done!</a></p>
-
                 </div>
-
-
                 {% endif %}</div>
                 {% endfor %}
-
             <form action="{{ url_for('add', list_title=task_list.list_title) }}" method="POST">
-            <p>Add a new todo item:
-            <input type="text" name="task-to-do"></p>
-                <p>add some details:
-                    <input type="text" name="details-to-do"></p>
+            <input type="text" name="task-to-do" placeholder="new task to do"></p>
+                    <input type="text" name="details-to-do" placeholder="description"></p>
             <input type="submit" value="Add!">
         </form>
         </div>
         {% endfor %}
     </div>
 
-    <div class="container existing-item">
-        <h3>already accomplished</h3>
-        <u1>
-            {% for element in accomplished %}
-            <p style="font-size: 15pt">{{ element.card_title }}</p>
-            {% endfor %}
-        </u1>
-    </div>
-
-
   <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
 
   <script src="static/js/collapse.js"></script>
-
-
+  <script src="static/js/scroll.js"></script>
 </body>
 </html>
