@@ -12,7 +12,10 @@ class TaskList(db.Model):
     __tablename__ = "task-list"
     id = db.Column(db.Integer, primary_key=True)
     list_title = db.Column(db.String(256),
+                           unique=True,
                            nullable=False)
+    newly_created = db.Column(db.Boolean,
+                              default=True)
     list_accomplished = db.Column(db.Boolean)
 
     task_cards = db.relationship('TaskCard')
@@ -51,7 +54,6 @@ def index():
     accomplished = TaskCard.query.filter_by(accomplished=True).all()
     list_accomplished = TaskCard.query.filter_by(accomplished=False).all()
     task_descriptions = db.session.query(TaskDetails).all()
-    print(task_descriptions, task_lists)
     return render_template('index.html', incomplete=incomplete, accomplished=accomplished, task_descriptions=task_descriptions, task_lists=task_lists, lists_accomplished=list_accomplished)
 
 
@@ -63,7 +65,7 @@ def create_new_list():
         db.session.add(new_list)
         db.session.commit()
     else:
-        print('Name of the list cannot be empty')
+       print('Name of the list cannot be empty')
     return redirect(url_for('index'))
 
 
@@ -72,6 +74,7 @@ def add(list_title):
     task_list = TaskList.query.filter_by(list_title=list_title).first()
     # task_list = db.session.query(TaskList).first()
     new_task = TaskCard(card_title=request.form['task-to-do'], accomplished=False, task_list=task_list)
+    task_list.newly_created = False;
     db.session.add(new_task)
     db.session.commit()
 

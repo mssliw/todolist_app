@@ -17,7 +17,7 @@
 
     <section class="lists">
         {% for task_list in task_lists %}
-        <div class="lists-content container existing-item">
+        <div class="lists-content container existing-item wordwrap">
             <h3>{{ task_list.list_title }}</h3>
                 {% for task_card in incomplete %}
             <div class="card">
@@ -25,9 +25,9 @@
                 <button class="collapsible"><p style="font-size: 20pt">{{ task_card.card_title }}</p></button>
                 <div class="content">
                     {% for task_details in task_card.task_details %}
-                        <p style="text"> {{ task_details.task_description }}</p>
+                        <p style="text"> {{ task_details.task_description }} <a href="{{ url_for('complete', id=task_card.id) }}"><img src="/static/img/done.svg"></a></p>
                     {% endfor %}
-                    <a href="{{ url_for('complete', id=task_card.id) }}">mark as done!</a></p>
+
                 </div>
                 {% endif %}</div>
                 {% endfor %}
