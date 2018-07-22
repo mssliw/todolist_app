@@ -72,7 +72,6 @@ def create_new_list():
 @app.route('/add/<list_title>', methods=['POST'])
 def add(list_title):
     task_list = TaskList.query.filter_by(list_title=list_title).first()
-    # task_list = db.session.query(TaskList).first()
     new_task = TaskCard(card_title=request.form['task-to-do'], accomplished=False, task_list=task_list)
     task_list.newly_created = False;
     db.session.add(new_task)
@@ -100,6 +99,18 @@ def complete(id):
     if not still_to_do:
         task_list.accomplished = True
         db.session.commit()
+
+    return redirect(url_for('index'))
+
+
+@app.route('/remove/<id>')
+def remove(id):
+    task_list = TaskList.query.filter_by(id=int(id)).first()
+    tasks_at_list = task_list.task_cards
+    [[db.session.delete(detail) for detail in task.task_details] for task in tasks_at_list]
+    [db.session.delete(task) for task in tasks_at_list]
+    db.session.delete(task_list)
+    db.session.commit()
 
     return redirect(url_for('index'))
 
