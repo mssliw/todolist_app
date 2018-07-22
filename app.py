@@ -1,119 +1,25 @@
-from flask import Flask, redirect, render_template, request, url_for
-from flask_sqlalchemy import SQLAlchemy
+import os
+from flask import Flask
 
-app = Flask(__name__)
-
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://///home/magda/PycharmProjects/todolist_app/data/todolist.db"
-
-db = SQLAlchemy(app)
+from init_db import db
+from views.index import todolist
 
 
-class TaskList(db.Model):
-    __tablename__ = "task-list"
-    id = db.Column(db.Integer, primary_key=True)
-    list_title = db.Column(db.String(256),
-                           unique=True,
-                           nullable=False)
-    newly_created = db.Column(db.Boolean,
-                              default=True)
-    list_accomplished = db.Column(db.Boolean)
+def create_app():
+    app = Flask(__name__)
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://///home/magda/PycharmProjects/todolist_app/data/todolist.db"
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    task_cards = db.relationship('TaskCard')
+    app.register_blueprint(todolist)
+    app.secret_key = os.urandom(24)
 
+    db.init_app(app)
 
-class TaskCard(db.Model):
-    __tablename__ = "task-card"
-    id = db.Column(db.Integer, primary_key=True)
-    card_title = db.Column(db.String(256))
-    accomplished = db.Column(db.Boolean)
-
-    task_list_id = db.Column(db.Integer,
-                             db.ForeignKey('task-list.id'),
-                             nullable=False)
-    task_list = db.relationship('TaskList',
-                                back_populates='task_cards')
-    task_details = db.relationship('TaskDetails')
+    return app
 
 
-class TaskDetails(db.Model):
-    __tablename__ = "details"
-    id = db.Column(db.Integer, primary_key=True)
-    task_description = db.Column(db.String(512))
-
-    task_card_id = db.Column(db.Integer,
-                             db.ForeignKey('task-card.id'),
-                             nullable=False)
-    task_card = db.relationship('TaskCard',
-                                back_populates='task_details')
+app = create_app()
 
 
-@app.route('/')
-def index():
-    task_lists = db.session.query(TaskList).all()
-    incomplete = TaskCard.query.filter_by(accomplished=False).all()
-    accomplished = TaskCard.query.filter_by(accomplished=True).all()
-    list_accomplished = TaskCard.query.filter_by(accomplished=False).all()
-    task_descriptions = db.session.query(TaskDetails).all()
-    return render_template('index.html', incomplete=incomplete, accomplished=accomplished, task_descriptions=task_descriptions, task_lists=task_lists, lists_accomplished=list_accomplished)
-
-
-@app.route('/create_new_list', methods=['POST'])
-def create_new_list():
-    list_title = request.form['create-new-list']
-    if list_title:
-        new_list = TaskList(list_title=request.form['create-new-list'])
-        db.session.add(new_list)
-        db.session.commit()
-    else:
-       print('Name of the list cannot be empty')
-    return redirect(url_for('index'))
-
-
-@app.route('/add/<list_title>', methods=['POST'])
-def add(list_title):
-    task_list = TaskList.query.filter_by(list_title=list_title).first()
-    new_task = TaskCard(card_title=request.form['task-to-do'], accomplished=False, task_list=task_list)
-    task_list.newly_created = False;
-    db.session.add(new_task)
-    db.session.commit()
-
-    detail = TaskDetails(task_description=request.form['details-to-do'], task_card_id=new_task.id)
-    db.session.add(detail)
-    db.session.commit()
-
-    return redirect(url_for('index'))
-
-
-@app.route('/update', methods=['POST'])
-def update():
-    return redirect(url_for('index'))
-
-
-@app.route('/accomplished/<id>')
-def complete(id):
-    task_list = TaskCard.query.filter_by(id=int(id)).first().task_list
-    task = TaskCard.query.filter_by(id=int(id)).first()
-    task.accomplished = True
-    db.session.commit()
-    still_to_do = TaskCard.query.filter_by(accomplished=False).first()
-    if not still_to_do:
-        task_list.accomplished = True
-        db.session.commit()
-
-    return redirect(url_for('index'))
-
-
-@app.route('/remove/<id>')
-def remove(id):
-    task_list = TaskList.query.filter_by(id=int(id)).first()
-    tasks_at_list = task_list.task_cards
-    [[db.session.delete(detail) for detail in task.task_details] for task in tasks_at_list]
-    [db.session.delete(task) for task in tasks_at_list]
-    db.session.delete(task_list)
-    db.session.commit()
-
-    return redirect(url_for('index'))
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    app.run()

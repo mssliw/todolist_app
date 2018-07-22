@@ -9,7 +9,7 @@
     <div class="header">
         <h1 class="title">plan your tasks</h1>
     </div>
-        <div class="new-list new-item "><form action="{{ url_for('create_new_list') }}" method='POST'>
+        <div class="new-list new-item "><form action="{{ url_for('todolist.create_new_list') }}" method='POST'>
             <h3 header>create new task list:</h3>
             <input type="text" name="create-new-list" placeholder="list name">
             <input type="submit" value="Add!">
@@ -18,20 +18,20 @@
     <section class="lists">
         {% for task_list in task_lists %}
         <div class="lists-content container existing-item wordwrap">
-            <h3>{{ task_list.list_title }} <a href="{{ url_for('remove', id=task_list.id) }}"> <img src="/static/img/remove.svg"></a></h3>
+            <h3>{{ task_list.list_title }} <a href="{{ url_for('todolist.remove', id=task_list.id) }}"> <img src="/static/img/remove.svg"></a></h3>
                 {% for task_card in incomplete %}
             <div class="card">
                 {% if task_card in task_list.task_cards %}
                 <button class="collapsible"><p style="font-size: 20pt">{{ task_card.card_title }} </p></button>
                 <div class="content">
                     {% for task_details in task_card.task_details %}
-                        <p style="text"> {{ task_details.task_description }} <a href="{{ url_for('complete', id=task_card.id) }}">mark as accomplished <img src="/static/img/done.svg"></a></p>
+                        <p style="text"> {{ task_details.task_description }} <a href="{{ url_for('todolist.complete', id=task_card.id) }}">mark as accomplished <img src="/static/img/done.svg"></a></p>
                     {% endfor %}
 
                 </div>
                 {% endif %}</div>
                 {% endfor %}
-            <form action="{{ url_for('add', list_title=task_list.list_title) }}" method="POST">
+            <form action="{{ url_for('todolist.add', list_title=task_list.list_title) }}" method="POST">
             <input type="text" name="task-to-do" placeholder="new task to do"></p>
                     <input type="text" name="details-to-do" placeholder="description"></p>
             <input type="submit" value="Add!">
