@@ -12,15 +12,10 @@
     <div class="header">
         <h1 class="title">plan your tasks</h1>
 
-         <button class="collapsible"><p style="font-size: 20pt">collapse this </p></button>
-                <div class="content">
-                        <p style="text">
-                            mark as accomplished <img src="/static/img/done.svg"></a></p>
     </div>
 
         <div class="new-list new-item ">
             <form method='post' action="{{ url_for('todolist.create_new_list') }}">
-            <h3 header>create new task list:</h3>
                 {{ create_list_form.hidden_tag() }}
                 {{ field_input(create_list_form.list_title, placeholder="New list title") }}
                 <input type="submit" name="submit" value="Add">
@@ -35,11 +30,11 @@
             <div class="card">
                 {% if task_card in task_list.task_cards %}
 
-                <button class="collapsible"><p style="font-size: 20pt">{{ task_card.card_title }} </p></button>
+                <button class="collapsible"><p style="font-size: 20pt">{{ task_card.card_title }} <a href="{{ url_for('todolist.complete', id=task_card.id) }}"> <img src="/static/img/done.svg"></a>  </p></button>
                 <div class="content">
                     {% for task_details in task_card.task_details %}
                         <p style="text"> {{ task_details.task_description }}
-                            <a href="{{ url_for('todolist.complete', id=task_card.id) }}">mark as accomplished <img src="/static/img/done.svg"></a></p>
+                            </p>
                     {% endfor %}
                     <div>
                     <form method="post" action="{{ url_for('todolist.add_details', id=task_card.id) }}" >
