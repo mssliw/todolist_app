@@ -6,14 +6,21 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet"></head>
 <body>
+
+   {% from "macros.html" import field_input with context %}
+    {% block content %}
+
     <div class="header">
         <h1 class="title">plan your tasks</h1>
     </div>
-        <div class="new-list new-item "><form action="{{ url_for('todolist.create_new_list') }}" method='POST'>
+        <div class="new-list new-item ">
+            <form method='post' action="{{ url_for('todolist.create_new_list') }}">
             <h3 header>create new task list:</h3>
-            <input type="text" name="create-new-list" placeholder="list name">
-            <input type="submit" value="Add!">
-        </form></div>
+                {{ create_list_form.hidden_tag() }}
+                {{ field_input(create_list_form.list_title, placeholder="New list title") }}
+                <input type="submit" name="submit" value="Add">
+            </form>
+        </div>
 
     <section class="lists">
         {% for task_list in task_lists %}
@@ -47,4 +54,6 @@
   <script src="static/js/collapse.js"></script>
   <script src="static/js/scroll.js"></script>
 </body>
+    {% endblock %}
+
 </html>

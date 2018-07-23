@@ -1,5 +1,6 @@
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import abort, Blueprint, redirect, render_template, request, url_for
 
+from forms.forms import CreateListForm
 from init_db import db
 from models.task_lists import (TaskList, TaskCard, TaskDetails)
 
@@ -7,31 +8,45 @@ todolist = Blueprint('todolist', __name__,
                      template_folder='templates')
 
 
-@todolist.route('/')
+@todolist.route('/', methods=['GET', 'POST'])
 def index():
     task_lists = db.session.query(TaskList).all()
     incomplete = TaskCard.query.filter_by(accomplished=False).all()
     accomplished = TaskCard.query.filter_by(accomplished=True).all()
     list_accomplished = TaskCard.query.filter_by(accomplished=False).all()
     task_descriptions = db.session.query(TaskDetails).all()
-    return render_template('index.html', incomplete=incomplete, accomplished=accomplished, task_descriptions=task_descriptions, task_lists=task_lists, lists_accomplished=list_accomplished)
+    create_list_form = CreateListForm()
+    print(task_lists)
+    return render_template('index.html', incomplete=incomplete, accomplished=accomplished, task_descriptions=task_descriptions, task_lists=task_lists, lists_accomplished=list_accomplished,
+                           create_list_form=create_list_form)
 
 
-@todolist.route('/create_new_list', methods=['POST'])
+@todolist.route('/create_new_list', methods=['GET','POST'])
 def create_new_list():
-    list_title = request.form['create-new-list']
-    all_lists = db.session.query(TaskList).all()
-    titles = [list.list_title for list in all_lists]
-    if list_title and list_title not in titles:
-        new_list = TaskList(list_title=request.form['create-new-list'])
-        db.session.add(new_list)
-        db.session.commit()
-    elif not list_title:
-        print('Name of the list cannot be empty')
-    elif list_title in titles:
-        print('Name of the list should be unique')
-    else:
-        print('Something went wrong')
+    # list_title = request.form['create-new-list']
+    # all_lists = db.session.query(TaskList).all()
+    # titles = [list.list_title for list in all_lists]
+    # if list_title and list_title not in titles:
+    #     new_list = TaskList(list_title=request.form['create-new-list'])
+    #     db.session.add(new_list)
+    #     db.session.commit()
+    # elif not list_title:
+    #     print('Name of the list cannot be empty')
+    # elif list_title in titles:
+    #     print('Name of the list should be unique')
+    # else:
+    #     print('Something went wrong')
+
+    create_list_form = CreateListForm()
+    if create_list_form.validate_on_submit():
+        print(' SUBMITTED ')
+        try:
+            new_list = TaskList(list_title=create_list_form.list_title.data)
+            db.session.add(new_list)
+            db.session.commit()
+
+        except Exception:
+            abort(500)
     return redirect(url_for('todolist.index'))
 
 
@@ -39,7 +54,7 @@ def create_new_list():
 def add(list_title):
     task_list = TaskList.query.filter_by(list_title=list_title).first()
     new_task = TaskCard(card_title=request.form['task-to-do'], accomplished=False, task_list=task_list)
-    task_list.newly_created = False;
+    task_list.newly_created = False
     db.session.add(new_task)
     db.session.commit()
 
