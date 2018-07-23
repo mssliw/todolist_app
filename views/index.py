@@ -1,14 +1,15 @@
 from flask import abort, Blueprint, redirect, render_template, request, url_for
 
-from forms.forms import CreateListForm
+from forms.forms import CreateListForm, AddCardForm, AddDetailsForm
 from init_db import db
 from models.task_lists import (TaskList, TaskCard, TaskDetails)
+
 
 todolist = Blueprint('todolist', __name__,
                      template_folder='templates')
 
 
-@todolist.route('/', methods=['GET', 'POST'])
+@todolist.route('/')
 def index():
     task_lists = db.session.query(TaskList).all()
     incomplete = TaskCard.query.filter_by(accomplished=False).all()
@@ -16,12 +17,13 @@ def index():
     list_accomplished = TaskCard.query.filter_by(accomplished=False).all()
     task_descriptions = db.session.query(TaskDetails).all()
     create_list_form = CreateListForm()
-    print(task_lists)
+    add_card_form = AddCardForm()
+    add_details_form = AddDetailsForm()
     return render_template('index.html', incomplete=incomplete, accomplished=accomplished, task_descriptions=task_descriptions, task_lists=task_lists, lists_accomplished=list_accomplished,
-                           create_list_form=create_list_form)
+                           create_list_form=create_list_form, add_card_form=add_card_form, add_details_form=add_details_form)
 
 
-@todolist.route('/create_new_list', methods=['GET','POST'])
+@todolist.route('/create_new_list', methods=['POST'])
 def create_new_list():
     # list_title = request.form['create-new-list']
     # all_lists = db.session.query(TaskList).all()
@@ -39,12 +41,10 @@ def create_new_list():
 
     create_list_form = CreateListForm()
     if create_list_form.validate_on_submit():
-        print(' SUBMITTED ')
         try:
             new_list = TaskList(list_title=create_list_form.list_title.data)
             db.session.add(new_list)
             db.session.commit()
-
         except Exception:
             abort(500)
     return redirect(url_for('todolist.index'))
@@ -52,21 +52,41 @@ def create_new_list():
 
 @todolist.route('/add/<list_title>', methods=['POST'])
 def add(list_title):
-    task_list = TaskList.query.filter_by(list_title=list_title).first()
-    new_task = TaskCard(card_title=request.form['task-to-do'], accomplished=False, task_list=task_list)
-    task_list.newly_created = False
-    db.session.add(new_task)
-    db.session.commit()
+    # task_list = TaskList.query.filter_by(list_title=list_title).first()
+    # new_task = TaskCard(card_title=request.form['task-to-do'], accomplished=False, task_list=task_list)
+    # task_list.newly_created = False
+    # db.session.add(new_task)
+    # db.session.commit()
+    #
+    # detail = TaskDetails(task_description=request.form['details-to-do'], task_card_id=new_task.id)
+    # db.session.add(detail)
+    # db.session.commit()
 
-    detail = TaskDetails(task_description=request.form['details-to-do'], task_card_id=new_task.id)
-    db.session.add(detail)
-    db.session.commit()
 
+    add_card_form = AddCardForm()
+    if add_card_form.validate_on_submit():
+        try:
+            task_list = TaskList.query.filter_by(list_title=list_title).first()
+            task_list.newly_created = False
+            new_card = TaskCard(card_title=add_card_form.card_title.data, accomplished=False, task_list=task_list)
+            db.session.add(new_card)
+            db.session.commit()
+        except Exception:
+            abort(500)
     return redirect(url_for('todolist.index'))
 
 
-@todolist.route('/update', methods=['POST'])
-def update():
+@todolist.route('/add_details/<id>', methods=['POST'])
+def add_details(id):
+    add_details_form = AddDetailsForm()
+    if add_details_form.validate_on_submit():
+        try:
+            task_card = TaskCard.query.filter_by(id=id).first()
+            new_detail = TaskDetails(task_description=add_details_form.task_description.data, task_card=task_card)
+            db.session.add(new_detail)
+            db.session.commit()
+        except Exception:
+            print('wtf')
     return redirect(url_for('todolist.index'))
 
 
