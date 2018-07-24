@@ -1,12 +1,12 @@
 import unittest
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 
 
 class TestToDoList(unittest.TestCase):
 
     def setUp(self):
-        self.driver = webdriver.Chrome(executable_path='/home/magda/chromedriver')
+        self.driver = webdriver.Chrome(
+            executable_path='/home/magda/chromedriver')
 
     def test_view(self):
         driver = self.driver
