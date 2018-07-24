@@ -17,5 +17,3 @@ class AddCardForm(ModelForm, FlaskForm):
 class AddDetailsForm(ModelForm, FlaskForm):
     class Meta:
         model = TaskDetails
-
-

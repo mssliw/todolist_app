@@ -5,4 +5,3 @@ with app.app_context():
     print('Database tables:')
     for table in db.metadata.sorted_tables:
         print('- {}'.format(table))
-
