@@ -7,3 +7,7 @@ To run:
         python3 create_db.py
 - Start the app on your localhost:5000
         python3 app.py
+
+
+To check app please visit following test-environment set:
+https://to-do-list-heroku.herokuapp.com/
