@@ -4,24 +4,20 @@
     <meta charset="UTF-8">
     <title>To do list app</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet"></head>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
+</head>
 <body>
-
    {% from "macros.html" import field_input with context %}
-
     <div class="header">
         <h1 class="title">plan your tasks</h1>
-
     </div>
-
-        <div class="new-list new-item ">
+        <div class="new-list new-item">
             <form method='post' action="{{ url_for('todolist.create_new_list') }}">
                 {{ create_list_form.hidden_tag() }}
                 {{ field_input(create_list_form.list_title, placeholder="New list title") }}
-                <input type="submit" name="submit" value="Add">
+                <input type="submit" name="submit" value="Add!">
             </form>
         </div>
-
     <section class="lists">
         {% for task_list in task_lists %}
         <div class="lists-content container existing-item wordwrap">
@@ -31,35 +27,28 @@
                 {% if task_card in task_list.task_cards %}
 
                 <button class="collapsible"><p style="font-size: 20pt">{{ task_card.card_title }} <a href="{{ url_for('todolist.complete', id=task_card.id) }}"> <img src="/static/img/done.svg"></a>  </p></button>
-                <div class="content">
+                    <div class="content">
                     {% for task_details in task_card.task_details %}
-                        <p style="text"> {{ task_details.task_description }}
-                            </p>
+                    <p style="text"> {{ task_details.task_description }}</p>
                     {% endfor %}
                     <div>
                     <form method="post" action="{{ url_for('todolist.add_details', id=task_card.id) }}" >
                         {{ add_details_form.hidden_tag() }}
-                        {{ field_input(add_details_form.task_description, placeholder="description") }}
-                    <input type="submit" name="submit" value="Add description">
+                        {{ field_input(add_details_form.task_description, placeholder="details") }}
+                    <input type="submit" name="submit" value="Add details!">
                     </form></div>
                 </div>
                 {% endif %}</div>
                 {% endfor %}
-
             <form method="post" action="{{ url_for('todolist.add', list_title=task_list.list_title) }}" >
                 {{ add_card_form.hidden_tag() }}
                 {{ field_input(add_card_form.card_title, placeholder="new task to do") }}
-                <input type="submit" name="submit" value="Add!"></form>
-
+                <input type="submit" name="submit" value="Add!">
+            </form>
         </div>
         {% endfor %}
     </section>
-    </div>
-
-  <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
-
+   </div>
   <script src="static/js/collapse.js"></script>
 </body>
-
 </html>
